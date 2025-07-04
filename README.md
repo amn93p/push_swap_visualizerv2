@@ -85,8 +85,8 @@ push-swap-tools/
 ### Installation
 ```bash
 # Cloner le repository
-git clone https://github.com/votre-username/push-swap-tools.git
-cd push-swap-tools
+git clone https://github.com/amn93p/push_swap_visualizerv2.git
+cd push_swap_visualizerv2
 
 # Installer les dépendances
 npm install
