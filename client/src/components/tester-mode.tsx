@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { TestTubeDiagonal, Upload, Settings, Play, FileCode, CheckCircle, AlertTriangle, TrendingUp } from "lucide-react";
+import { TestTubeDiagonal, Upload, Settings, Play, FileCode, CheckCircle, AlertTriangle, TrendingUp, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import FileUpload from "./file-upload";
 import type { TestResult, TestSummary } from "@/lib/types";
@@ -21,6 +22,7 @@ export default function TesterMode() {
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [summary, setSummary] = useState<TestSummary | null>(null);
   const [progress, setProgress] = useState(0);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const { toast } = useToast();
 
   const testMutation = useMutation({
@@ -283,31 +285,58 @@ export default function TesterMode() {
 
         {/* Detailed Results */}
         {testResults.length > 0 && (
-          <Card className="bg-gray-800 border-gray-700">
-            <CardHeader>
-              <CardTitle className="text-white">Résultats détaillés</CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {testResults.map((result, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <span className="text-gray-300">Test {result.test}</span>
-                      <span className={`text-sm ${result.validation ? 'text-green-400' : 'text-red-400'}`}>
-                        {result.validation ? '✓ Valide' : '✗ Invalide'}
+          <Collapsible 
+            open={isDetailsOpen} 
+            onOpenChange={setIsDetailsOpen}
+            className="space-y-2"
+          >
+            <Card className="bg-gray-800 border-gray-700">
+              <CollapsibleTrigger asChild>
+                <CardHeader className="cursor-pointer hover:bg-gray-700/50 transition-colors">
+                  <CardTitle className="text-white flex items-center justify-between">
+                    <span>Résultats détaillés</span>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm text-gray-400">
+                        {testResults.length} test{testResults.length > 1 ? 's' : ''}
                       </span>
-                      <span className={`text-sm ${result.performanceValid ? 'text-green-400' : 'text-red-400'}`}>
-                        {result.operations} ops {result.performanceValid ? '✓' : '✗'}
-                      </span>
+                      {isDetailsOpen ? (
+                        <ChevronUp className="h-4 w-4 text-gray-400" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 text-gray-400" />
+                      )}
                     </div>
-                    {result.error && (
-                      <span className="text-red-400 text-sm">{result.error}</span>
-                    )}
+                  </CardTitle>
+                </CardHeader>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <CardContent className="pt-0 pb-6 px-6">
+                  <div className="space-y-2 max-h-96 overflow-y-auto">
+                    {testResults.map((result, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
+                        <div className="flex items-center space-x-4">
+                          <span className="text-gray-300 font-medium">Test {result.test}</span>
+                          <span className={`text-sm font-medium ${result.validation ? 'text-green-400' : 'text-red-400'}`}>
+                            {result.validation ? '✓ Valide' : '✗ Invalide'}
+                          </span>
+                          <span className={`text-sm font-medium ${result.performanceValid ? 'text-green-400' : 'text-red-400'}`}>
+                            {result.operations} ops {result.performanceValid ? '✓' : '✗'}
+                          </span>
+                        </div>
+                        {result.error && (
+                          <span className="text-red-400 text-sm font-mono">{result.error}</span>
+                        )}
+                        {result.args && showArgs && (
+                          <span className="text-blue-400 text-xs font-mono truncate max-w-xs">
+                            Args: {result.args}
+                          </span>
+                        )}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </CollapsibleContent>
+            </Card>
+          </Collapsible>
         )}
       </div>
     </section>
