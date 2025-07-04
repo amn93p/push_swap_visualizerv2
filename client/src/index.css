@@ -130,59 +130,182 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
+  .stack-container {
+    background: linear-gradient(135deg, 
+      hsl(210, 20%, 10%) 0%, 
+      hsl(220, 15%, 8%) 50%, 
+      hsl(230, 25%, 12%) 100%);
+    border: 1px solid hsl(215, 20%, 25%);
+    position: relative;
+    overflow: visible !important;
+  }
+
   .stack-element {
-    background: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(262, 83%, 58%) 100%);
+    background: linear-gradient(135deg, 
+      hsl(240, 100%, 75%) 0%, 
+      hsl(260, 100%, 70%) 35%, 
+      hsl(280, 100%, 65%) 100%);
     color: white;
-    border: 1px solid hsl(262, 83%, 58%);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid hsl(260, 100%, 70%);
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
     font-weight: 600;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: all 0.3s ease;
     position: relative;
     z-index: 1;
   }
 
-  .stack-element.moving {
-    transform: scale(1.1) translateZ(10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, hsl(172, 66%, 50%) 0%, hsl(187, 85%, 53%) 100%);
-    border-color: hsl(172, 66%, 50%);
-    z-index: 10;
-    animation: pulse-glow 0.6s ease-in-out;
+  .stack-element.moving-left {
+    animation: move-to-left 0.8s ease-in-out forwards;
+    z-index: 100;
+  }
+
+  .stack-element.moving-right {
+    animation: move-to-right 0.8s ease-in-out forwards;
+    z-index: 100;
   }
 
   .stack-element.swapping {
-    animation: swap-bounce 0.4s ease-in-out;
+    animation: swap-highlight 0.6s ease-in-out;
   }
 
   .stack-element.rotating {
-    animation: rotate-highlight 0.5s ease-in-out;
+    animation: rotate-cycle 0.7s ease-in-out;
   }
 
-  @keyframes pulse-glow {
-    0%, 100% {
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  @keyframes move-to-left {
+    0% {
+      transform: translateX(0) translateY(0) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
+    }
+    25% {
+      transform: translateX(-50px) translateY(-30px) scale(1.15);
+      background: linear-gradient(135deg, 
+        hsl(180, 100%, 70%) 0%, 
+        hsl(200, 100%, 65%) 35%, 
+        hsl(220, 100%, 60%) 100%);
+      box-shadow: 0 8px 25px rgba(34, 211, 238, 0.6);
     }
     50% {
-      box-shadow: 0 8px 20px rgba(20, 184, 166, 0.6), 0 0 20px rgba(20, 184, 166, 0.4);
+      transform: translateX(-100px) translateY(-40px) scale(1.2);
+      background: linear-gradient(135deg, 
+        hsl(160, 100%, 65%) 0%, 
+        hsl(180, 100%, 60%) 35%, 
+        hsl(200, 100%, 55%) 100%);
+      box-shadow: 0 10px 30px rgba(20, 184, 166, 0.8);
+    }
+    75% {
+      transform: translateX(-150px) translateY(-20px) scale(1.1);
+      background: linear-gradient(135deg, 
+        hsl(140, 100%, 60%) 0%, 
+        hsl(160, 100%, 55%) 35%, 
+        hsl(180, 100%, 50%) 100%);
+    }
+    100% {
+      transform: translateX(-200px) translateY(0) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
     }
   }
 
-  @keyframes swap-bounce {
-    0%, 100% {
-      transform: translateY(0);
+  @keyframes move-to-right {
+    0% {
+      transform: translateX(0) translateY(0) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
+    }
+    25% {
+      transform: translateX(50px) translateY(-30px) scale(1.15);
+      background: linear-gradient(135deg, 
+        hsl(300, 100%, 70%) 0%, 
+        hsl(320, 100%, 65%) 35%, 
+        hsl(340, 100%, 60%) 100%);
+      box-shadow: 0 8px 25px rgba(236, 72, 153, 0.6);
     }
     50% {
-      transform: translateY(-8px) scale(1.05);
+      transform: translateX(100px) translateY(-40px) scale(1.2);
+      background: linear-gradient(135deg, 
+        hsl(280, 100%, 65%) 0%, 
+        hsl(300, 100%, 60%) 35%, 
+        hsl(320, 100%, 55%) 100%);
+      box-shadow: 0 10px 30px rgba(168, 85, 247, 0.8);
+    }
+    75% {
+      transform: translateX(150px) translateY(-20px) scale(1.1);
+      background: linear-gradient(135deg, 
+        hsl(260, 100%, 60%) 0%, 
+        hsl(280, 100%, 55%) 35%, 
+        hsl(300, 100%, 50%) 100%);
+    }
+    100% {
+      transform: translateX(200px) translateY(0) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
     }
   }
 
-  @keyframes rotate-highlight {
+  @keyframes swap-highlight {
     0%, 100% {
-      background: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(262, 83%, 58%) 100%);
+      transform: translateY(0) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
     }
     50% {
-      background: linear-gradient(135deg, hsl(45, 93%, 58%) 0%, hsl(32, 95%, 55%) 100%);
-      transform: scale(1.05);
+      transform: translateY(-15px) scale(1.08);
+      background: linear-gradient(135deg, 
+        hsl(60, 100%, 70%) 0%, 
+        hsl(45, 100%, 65%) 35%, 
+        hsl(30, 100%, 60%) 100%);
+      box-shadow: 0 8px 25px rgba(251, 191, 36, 0.7);
+    }
+  }
+
+  @keyframes rotate-cycle {
+    0% {
+      transform: rotate(0deg) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
+    }
+    25% {
+      transform: rotate(90deg) scale(1.05);
+      background: linear-gradient(135deg, 
+        hsl(120, 100%, 70%) 0%, 
+        hsl(140, 100%, 65%) 35%, 
+        hsl(160, 100%, 60%) 100%);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.1);
+      background: linear-gradient(135deg, 
+        hsl(180, 100%, 70%) 0%, 
+        hsl(200, 100%, 65%) 35%, 
+        hsl(220, 100%, 60%) 100%);
+      box-shadow: 0 6px 20px rgba(34, 211, 238, 0.6);
+    }
+    75% {
+      transform: rotate(270deg) scale(1.05);
+      background: linear-gradient(135deg, 
+        hsl(300, 100%, 70%) 0%, 
+        hsl(320, 100%, 65%) 35%, 
+        hsl(340, 100%, 60%) 100%);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+      background: linear-gradient(135deg, 
+        hsl(240, 100%, 75%) 0%, 
+        hsl(260, 100%, 70%) 35%, 
+        hsl(280, 100%, 65%) 100%);
     }
   }
 

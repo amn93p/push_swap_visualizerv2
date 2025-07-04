@@ -46,30 +46,36 @@ export default function StackVisualization({
   const executeOperation = (operation: string) => {
     const newState = { ...stackState };
     let elementToAnimate: number | null = null;
-    let animationType: 'swap' | 'move' | 'rotate' = 'swap';
+    let animationType: 'swap' | 'move-left' | 'move-right' | 'rotate' = 'swap';
     
     switch (operation) {
       case 'sa':
         if (newState.a.length >= 2) {
           [newState.a[0], newState.a[1]] = [newState.a[1], newState.a[0]];
-          elementToAnimate = newState.a[0];
+          setAnimatingElements(new Set([newState.a[0], newState.a[1]]));
           animationType = 'swap';
         }
         break;
       case 'sb':
         if (newState.b.length >= 2) {
           [newState.b[0], newState.b[1]] = [newState.b[1], newState.b[0]];
-          elementToAnimate = newState.b[0];
+          setAnimatingElements(new Set([newState.b[0], newState.b[1]]));
           animationType = 'swap';
         }
         break;
       case 'ss':
+        const elementsToSwap = new Set<number>();
         if (newState.a.length >= 2) {
           [newState.a[0], newState.a[1]] = [newState.a[1], newState.a[0]];
+          elementsToSwap.add(newState.a[0]);
+          elementsToSwap.add(newState.a[1]);
         }
         if (newState.b.length >= 2) {
           [newState.b[0], newState.b[1]] = [newState.b[1], newState.b[0]];
+          elementsToSwap.add(newState.b[0]);
+          elementsToSwap.add(newState.b[1]);
         }
+        setAnimatingElements(elementsToSwap);
         animationType = 'swap';
         break;
       case 'pa':
@@ -77,7 +83,7 @@ export default function StackVisualization({
           const element = newState.b.shift()!;
           newState.a.unshift(element);
           elementToAnimate = element;
-          animationType = 'move';
+          animationType = 'move-left';
           setMovingElement({ value: element, from: 'b', to: 'a' });
         }
         break;
@@ -86,7 +92,7 @@ export default function StackVisualization({
           const element = newState.a.shift()!;
           newState.b.unshift(element);
           elementToAnimate = element;
-          animationType = 'move';
+          animationType = 'move-right';
           setMovingElement({ value: element, from: 'a', to: 'b' });
         }
         break;
@@ -107,14 +113,18 @@ export default function StackVisualization({
         }
         break;
       case 'rr':
+        const elementsToRotate = new Set<number>();
         if (newState.a.length > 0) {
           const element = newState.a.shift()!;
           newState.a.push(element);
+          elementsToRotate.add(element);
         }
         if (newState.b.length > 0) {
           const element = newState.b.shift()!;
           newState.b.push(element);
+          elementsToRotate.add(element);
         }
+        setAnimatingElements(elementsToRotate);
         animationType = 'rotate';
         break;
       case 'rra':
@@ -134,20 +144,24 @@ export default function StackVisualization({
         }
         break;
       case 'rrr':
+        const elementsToRRotate = new Set<number>();
         if (newState.a.length > 0) {
           const element = newState.a.pop()!;
           newState.a.unshift(element);
+          elementsToRRotate.add(element);
         }
         if (newState.b.length > 0) {
           const element = newState.b.pop()!;
           newState.b.unshift(element);
+          elementsToRRotate.add(element);
         }
+        setAnimatingElements(elementsToRRotate);
         animationType = 'rotate';
         break;
     }
 
-    // Set animation state
-    if (elementToAnimate) {
+    // Set single element animation for move operations
+    if (elementToAnimate && (animationType === 'move-left' || animationType === 'move-right' || animationType === 'rotate')) {
       setAnimatingElements(new Set([elementToAnimate]));
     }
 
@@ -157,7 +171,7 @@ export default function StackVisualization({
     setTimeout(() => {
       setAnimatingElements(new Set());
       setMovingElement(null);
-    }, Math.min(animationSpeed * 0.7, 400));
+    }, 800);
   };
 
   const renderStack = (stack: number[], label: string, color: string) => (
@@ -180,7 +194,13 @@ export default function StackVisualization({
             let animationClass = '';
             if (isAnimating) {
               if (isMoving) {
-                animationClass = 'moving';
+                // Determine direction based on move operation
+                const currentOp = operations[currentOperation - 1];
+                if (currentOp === 'pa') {
+                  animationClass = 'moving-left';
+                } else if (currentOp === 'pb') {
+                  animationClass = 'moving-right';
+                }
               } else {
                 // For swap and rotate operations
                 const currentOp = operations[currentOperation - 1];
@@ -196,6 +216,10 @@ export default function StackVisualization({
               <div
                 key={`${number}-${index}`}
                 className={`stack-element p-3 rounded-lg text-center font-mono text-lg ${animationClass}`}
+                style={{
+                  position: 'relative',
+                  overflow: 'visible'
+                }}
               >
                 {number}
               </div>
