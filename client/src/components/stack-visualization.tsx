@@ -38,7 +38,7 @@ export default function StackVisualization({
     const timer = setTimeout(() => {
       executeOperation(operations[currentOperation]);
       onOperationChange(currentOperation + 1);
-    }, Math.max(animationSpeed, 700));
+    }, Math.max(animationSpeed, 500));
 
     return () => clearTimeout(timer);
   }, [isPlaying, currentOperation, operations, animationSpeed]);
@@ -171,7 +171,7 @@ export default function StackVisualization({
     setTimeout(() => {
       setAnimatingElements(new Set());
       setMovingElement(null);
-    }, 600);
+    }, 400);
   };
 
   const renderStack = (stack: number[], label: string, color: string) => (

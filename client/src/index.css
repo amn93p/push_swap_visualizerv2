@@ -155,21 +155,21 @@
   }
 
   .stack-element.moving-left {
-    animation: slide-to-left 0.6s ease-out forwards;
+    animation: slide-to-left 0.4s ease-out forwards;
     z-index: 100;
   }
 
   .stack-element.moving-right {
-    animation: slide-to-right 0.6s ease-out forwards;
+    animation: slide-to-right 0.4s ease-out forwards;
     z-index: 100;
   }
 
   .stack-element.swapping {
-    animation: swap-bounce 0.4s ease-in-out;
+    animation: swap-bounce 0.3s ease-in-out;
   }
 
   .stack-element.rotating {
-    animation: rotate-fade 0.5s ease-in-out;
+    animation: rotate-fade 0.3s ease-in-out;
   }
 
   @keyframes slide-to-left {
@@ -177,13 +177,13 @@
       transform: translateX(0) translateY(0) scale(1);
       opacity: 1;
     }
-    30% {
-      transform: translateX(-80px) translateY(-20px) scale(1.05);
-      opacity: 0.9;
+    50% {
+      transform: translateX(-20px) translateY(-10px) scale(1.02);
+      opacity: 0.8;
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
     }
     100% {
-      transform: translateX(-160px) translateY(0) scale(1);
+      transform: translateX(0) translateY(0) scale(1);
       opacity: 1;
     }
   }
@@ -193,13 +193,13 @@
       transform: translateX(0) translateY(0) scale(1);
       opacity: 1;
     }
-    30% {
-      transform: translateX(80px) translateY(-20px) scale(1.05);
-      opacity: 0.9;
+    50% {
+      transform: translateX(20px) translateY(-10px) scale(1.02);
+      opacity: 0.8;
       box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
     }
     100% {
-      transform: translateX(160px) translateY(0) scale(1);
+      transform: translateX(0) translateY(0) scale(1);
       opacity: 1;
     }
   }
@@ -209,8 +209,8 @@
       transform: translateY(0) scale(1);
     }
     50% {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 6px 15px rgba(139, 92, 246, 0.3);
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 4px 10px rgba(139, 92, 246, 0.3);
     }
   }
 
@@ -220,9 +220,9 @@
       opacity: 1;
     }
     50% {
-      transform: scale(1.05);
-      opacity: 0.8;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      transform: scale(1.02);
+      opacity: 0.9;
+      box-shadow: 0 3px 8px rgba(139, 92, 246, 0.3);
     }
   }
 
