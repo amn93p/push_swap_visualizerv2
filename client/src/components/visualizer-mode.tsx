@@ -42,6 +42,7 @@ export default function VisualizerMode() {
       setStackState({ a: data.numbers, b: [] });
       setCurrentOperation(0);
       setIsComplete(false);
+      setIsPlaying(true); // Auto-start the animation
       toast({
         title: "Visualisation générée",
         description: `${data.operations.length} opérations à exécuter`,

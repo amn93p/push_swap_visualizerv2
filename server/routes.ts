@@ -38,18 +38,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       for (let i = 0; i < parseInt(testCount); i++) {
         try {
-          // Generate random numbers
-          const numbers = Array.from({ length: parseInt(listSize) }, () => 
-            Math.floor(Math.random() * 1000) + 1
-          );
-          const args = numbers.join(' ');
+          // Generate random unique numbers
+          const numbers = new Set<number>();
+          while (numbers.size < parseInt(listSize)) {
+            numbers.add(Math.floor(Math.random() * (parseInt(listSize) * 10)) + 1);
+          }
+          const args = Array.from(numbers).join(' ');
 
           // Validation test
           const validationResult = await new Promise<string>((resolve, reject) => {
-            exec(`${pushSwapFile.path} ${args} | ${checkerFile.path} ${args}`, 
+            exec(`"${pushSwapFile.path}" ${args} | "${checkerFile.path}" ${args}`, 
               (error, stdout, stderr) => {
                 if (error) {
-                  reject(error);
+                  reject(new Error(`Command failed: ${error.message}`));
                 } else {
                   resolve(stdout.trim());
                 }
@@ -61,10 +62,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
           // Performance test
           const operationsResult = await new Promise<number>((resolve, reject) => {
-            exec(`${pushSwapFile.path} ${args} | wc -l`, 
+            exec(`"${pushSwapFile.path}" ${args} | wc -l`, 
               (error, stdout, stderr) => {
                 if (error) {
-                  reject(error);
+                  reject(new Error(`Command failed: ${error.message}`));
                 } else {
                   resolve(parseInt(stdout.trim()));
                 }
@@ -140,18 +141,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Make file executable
       await fs.chmod(file.path, 0o755);
 
-      // Generate random numbers
-      const numbers = Array.from({ length: parseInt(listSize) }, () => 
-        Math.floor(Math.random() * 1000) + 1
-      );
-      const args = numbers.join(' ');
+      // Generate random unique numbers
+      const numbers = new Set<number>();
+      while (numbers.size < parseInt(listSize)) {
+        numbers.add(Math.floor(Math.random() * (parseInt(listSize) * 10)) + 1);
+      }
+      const numbersArray = Array.from(numbers);
+      const args = numbersArray.join(' ');
 
       // Get operations
       const operations = await new Promise<string>((resolve, reject) => {
-        exec(`${file.path} ${args}`, 
+        exec(`"${file.path}" ${args}`, 
           (error, stdout, stderr) => {
             if (error) {
-              reject(error);
+              reject(new Error(`Command failed: ${error.message}`));
             } else {
               resolve(stdout.trim());
             }
@@ -170,7 +173,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         visualization,
-        numbers,
+        numbers: numbersArray,
         operations: operations.split('\n').filter(op => op.trim() !== '')
       });
 
