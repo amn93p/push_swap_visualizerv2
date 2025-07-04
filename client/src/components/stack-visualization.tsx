@@ -25,6 +25,7 @@ export default function StackVisualization({
   onComplete,
 }: StackVisualizationProps) {
   const [animatingElements, setAnimatingElements] = useState<Set<number>>(new Set());
+  const [movingElement, setMovingElement] = useState<{ value: number; from: 'a' | 'b'; to: 'a' | 'b' } | null>(null);
 
   useEffect(() => {
     if (!isPlaying || currentOperation >= operations.length) {
@@ -44,16 +45,22 @@ export default function StackVisualization({
 
   const executeOperation = (operation: string) => {
     const newState = { ...stackState };
+    let elementToAnimate: number | null = null;
+    let animationType: 'swap' | 'move' | 'rotate' = 'swap';
     
     switch (operation) {
       case 'sa':
         if (newState.a.length >= 2) {
           [newState.a[0], newState.a[1]] = [newState.a[1], newState.a[0]];
+          elementToAnimate = newState.a[0];
+          animationType = 'swap';
         }
         break;
       case 'sb':
         if (newState.b.length >= 2) {
           [newState.b[0], newState.b[1]] = [newState.b[1], newState.b[0]];
+          elementToAnimate = newState.b[0];
+          animationType = 'swap';
         }
         break;
       case 'ss':
@@ -63,31 +70,40 @@ export default function StackVisualization({
         if (newState.b.length >= 2) {
           [newState.b[0], newState.b[1]] = [newState.b[1], newState.b[0]];
         }
+        animationType = 'swap';
         break;
       case 'pa':
         if (newState.b.length > 0) {
           const element = newState.b.shift()!;
           newState.a.unshift(element);
-          setAnimatingElements(new Set([element]));
+          elementToAnimate = element;
+          animationType = 'move';
+          setMovingElement({ value: element, from: 'b', to: 'a' });
         }
         break;
       case 'pb':
         if (newState.a.length > 0) {
           const element = newState.a.shift()!;
           newState.b.unshift(element);
-          setAnimatingElements(new Set([element]));
+          elementToAnimate = element;
+          animationType = 'move';
+          setMovingElement({ value: element, from: 'a', to: 'b' });
         }
         break;
       case 'ra':
         if (newState.a.length > 0) {
           const element = newState.a.shift()!;
           newState.a.push(element);
+          elementToAnimate = element;
+          animationType = 'rotate';
         }
         break;
       case 'rb':
         if (newState.b.length > 0) {
           const element = newState.b.shift()!;
           newState.b.push(element);
+          elementToAnimate = element;
+          animationType = 'rotate';
         }
         break;
       case 'rr':
@@ -99,17 +115,22 @@ export default function StackVisualization({
           const element = newState.b.shift()!;
           newState.b.push(element);
         }
+        animationType = 'rotate';
         break;
       case 'rra':
         if (newState.a.length > 0) {
           const element = newState.a.pop()!;
           newState.a.unshift(element);
+          elementToAnimate = element;
+          animationType = 'rotate';
         }
         break;
       case 'rrb':
         if (newState.b.length > 0) {
           const element = newState.b.pop()!;
           newState.b.unshift(element);
+          elementToAnimate = element;
+          animationType = 'rotate';
         }
         break;
       case 'rrr':
@@ -121,15 +142,22 @@ export default function StackVisualization({
           const element = newState.b.pop()!;
           newState.b.unshift(element);
         }
+        animationType = 'rotate';
         break;
+    }
+
+    // Set animation state
+    if (elementToAnimate) {
+      setAnimatingElements(new Set([elementToAnimate]));
     }
 
     onStackStateChange(newState);
     
-    // Clear animation after a short delay
+    // Clear animations after delay
     setTimeout(() => {
       setAnimatingElements(new Set());
-    }, 200);
+      setMovingElement(null);
+    }, Math.min(animationSpeed * 0.7, 400));
   };
 
   const renderStack = (stack: number[], label: string, color: string) => (
@@ -145,16 +173,34 @@ export default function StackVisualization({
             <p>Pile vide</p>
           </div>
         ) : (
-          stack.map((number, index) => (
-            <div
-              key={`${number}-${index}`}
-              className={`stack-element p-3 rounded-lg text-center font-mono text-lg transition-all duration-300 ${
-                animatingElements.has(number) ? 'moving' : ''
-              }`}
-            >
-              {number}
-            </div>
-          ))
+          stack.map((number, index) => {
+            const isAnimating = animatingElements.has(number);
+            const isMoving = movingElement?.value === number;
+            
+            let animationClass = '';
+            if (isAnimating) {
+              if (isMoving) {
+                animationClass = 'moving';
+              } else {
+                // For swap and rotate operations
+                const currentOp = operations[currentOperation - 1];
+                if (currentOp?.startsWith('s')) {
+                  animationClass = 'swapping';
+                } else if (currentOp?.startsWith('r')) {
+                  animationClass = 'rotating';
+                }
+              }
+            }
+            
+            return (
+              <div
+                key={`${number}-${index}`}
+                className={`stack-element p-3 rounded-lg text-center font-mono text-lg ${animationClass}`}
+              >
+                {number}
+              </div>
+            );
+          })
         )}
       </div>
     </div>
@@ -170,28 +216,40 @@ export default function StackVisualization({
 
   return (
     <div className="space-y-8">
-      {/* Stacks Visualization */}
-      <div className="grid md:grid-cols-2 gap-8">
-        {renderStack(stackState.a, "Pile A", "text-blue-400")}
-        {renderStack(stackState.b, "Pile B", "text-purple-400")}
-      </div>
-
-      {/* Status Display */}
+      {/* Status Display - Moved to top */}
       <div className="text-center">
-        <div className="inline-flex items-center space-x-3 bg-gray-900 px-6 py-3 rounded-lg border border-gray-600">
-          <div className="flex items-center space-x-2">
-            <div className={`w-3 h-3 rounded-full ${
+        <div className="inline-flex items-center space-x-4 bg-gray-900 px-8 py-4 rounded-xl border border-gray-600 shadow-lg">
+          <div className="flex items-center space-x-3">
+            <div className={`w-4 h-4 rounded-full transition-all duration-300 ${
               currentOperation >= operations.length 
-                ? (isSorted() ? 'bg-green-500' : 'bg-red-500')
-                : 'bg-yellow-500 animate-pulse'
+                ? (isSorted() ? 'bg-green-500 shadow-lg shadow-green-500/50' : 'bg-red-500 shadow-lg shadow-red-500/50')
+                : 'bg-yellow-500 animate-pulse shadow-lg shadow-yellow-500/50'
             }`}></div>
-            <span className="text-gray-300">
+            <span className={`font-semibold text-lg ${
+              currentOperation >= operations.length 
+                ? (isSorted() ? 'text-green-400' : 'text-red-400')
+                : 'text-yellow-400'
+            }`}>
               {currentOperation >= operations.length 
                 ? (isSorted() ? 'Tri terminé avec succès ✓' : 'Tri terminé avec échec ✗')
                 : 'Tri en cours...'}
             </span>
           </div>
+          {currentOperation < operations.length && (
+            <div className="flex items-center space-x-2 text-gray-400">
+              <span className="text-sm">Progression:</span>
+              <span className="text-white font-mono">
+                {currentOperation} / {operations.length}
+              </span>
+            </div>
+          )}
         </div>
+      </div>
+
+      {/* Stacks Visualization */}
+      <div className="grid md:grid-cols-2 gap-8">
+        {renderStack(stackState.a, "Pile A", "text-blue-400")}
+        {renderStack(stackState.b, "Pile B", "text-purple-400")}
       </div>
     </div>
   );
