@@ -6,7 +6,7 @@ Une application web complète pour tester et visualiser les algorithmes push_swa
 
 **[Essayez l'application ici](https://push-swap-visualizerv2.onrender.com/)**
 
-## 🎥 Aperçu en GIF
+## 🎥 Aperçu
 
 Voici un aperçu de l'application en action :
 
