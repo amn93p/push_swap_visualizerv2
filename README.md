@@ -10,7 +10,7 @@ Une application web complète pour tester et visualiser les algorithmes push_swa
 
 Voici un aperçu de l'application en action :
 
-![Demo Push Swap Tools](./assets/demo.gif)
+![Demo Push Swap Tools](https://pouch.jumpshare.com/preview/SSlm9e208u_V4zKi6Y1GXURzvY32smfJ9yapUbWJgCo2Epv1gIJJSWbovHTPF6orwZySEXVoHfPKxAh5wbU_nazM_Zikf_MXKuz1HhoJ8g0)
 
 ## 📖 Description
 
