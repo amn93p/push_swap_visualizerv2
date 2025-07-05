@@ -125,14 +125,6 @@ DATABASE_URL=postgresql://...  # Pour utiliser PostgreSQL
 3. Ajustez la vitesse d'animation
 4. Générez et visualisez le tri étape par étape
 
-## 🎯 Fonctionnalités à venir
-
-- [ ] Sauvegarde des configurations de test
-- [ ] Comparaison de différents algorithmes
-- [ ] Export des résultats en PDF
-- [ ] Mode sombre/clair
-- [ ] Historique des tests
-
 ## 🤝 Contribution
 
 Les contributions sont les bienvenues ! Pour contribuer :
