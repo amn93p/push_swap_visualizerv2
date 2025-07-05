@@ -6,6 +6,12 @@ Une application web complète pour tester et visualiser les algorithmes push_swa
 
 **[Essayez l'application ici](https://push-swap-visualizerv2.onrender.com/)**
 
+## 🎥 Aperçu en GIF
+
+Voici un aperçu de l'application en action :
+
+![Demo Push Swap Tools](./assets/demo.gif)
+
 ## 📖 Description
 
 Push Swap Tools est une suite d'outils dédiée au projet push_swap de l'école 42. L'application offre deux modes principaux :
