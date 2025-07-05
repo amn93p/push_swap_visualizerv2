@@ -10,7 +10,7 @@ Une application web complète pour tester et visualiser les algorithmes push_swa
 
 Voici un aperçu de l'application en action :
 
-![Demo Push Swap Tools](https://pouch.jumpshare.com/preview/SSlm9e208u_V4zKi6Y1GXURzvY32smfJ9yapUbWJgCo2Epv1gIJJSWbovHTPF6orwZySEXVoHfPKxAh5wbU_nazM_Zikf_MXKuz1HhoJ8g0)
+![Demo Push Swap Tools]([https://pouch.jumpshare.com/preview/SSlm9e208u_V4zKi6Y1GXURzvY32smfJ9yapUbWJgCo2Epv1gIJJSWbovHTPF6orwZySEXVoHfPKxAh5wbU_nazM_Zikf_MXKuz1HhoJ8g0](https://d2q3ae1ufbntlp.cloudfront.net/j7kc8x%2Fpreview%2F68735108%2Fmain_large.gif?response-content-disposition=inline%3Bfilename%3D%22main_large.gif%22%3B&response-content-type=image%2Fgif&Expires=1751676879&Signature=g2bqRhfLWk9-pkTbEFsP~mx-wtH7YgRXr0brchBIjBUuFzXEtCbyZPAUQDgjYEBZcEpIguTmdzww9FLA8fbcTjmpl1sbX-RRoCTSiWV4SYJ1kd~2zU9rIkBSvlBaXCh6II5KWR3~xoi7O7q5O43D451cU6MhtINsLqNwUZ1ViZy2fQIv0MkPrbwY0SE3sHiwLxOs1D0-AjRNDif8I05PajxlpuIGh0QN-zkGg8Q2U2N0l4cTpTAUmQ7Yv8o9fU3f~9RgurJzMrouZpmb1TkM7apyTpcHqmzbJ-opU9RnSLvKCevpTAqgTJfIAU9vWzpsNhtSoft~nwplL92HWH6iWQ__&Key-Pair-Id=APKAJT5WQLLEOADKLHBQ))
 
 ## 📖 Description
 
